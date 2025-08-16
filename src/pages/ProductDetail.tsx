@@ -3,19 +3,27 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useParams } from "react-router-dom";
-import { Heart, ShoppingBag, Truck, RotateCcw } from "lucide-react";
+import { Heart, ShoppingBag, Truck, RotateCcw, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { createClient } from "@supabase/supabase-js";
+import { useState } from "react";
 import indigoFan from "@/assets/indigo-sunburst-fan.jpg";
 import goldFan from "@/assets/gold-kente-fan.jpg";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { toast } = useToast();
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  const supabase = createClient(
+    import.meta.env.VITE_SUPABASE_URL!,
+    import.meta.env.VITE_SUPABASE_ANON_KEY!
+  );
 
   const products = {
     "indigo-sunburst": {
       name: "Indigo Sunburst Folding Fan",
-      price: "£34",
+      price: 34,
       image: indigoFan,
       description: "Ankara indigo geometry, brown leather handle",
       materials: "Ankara cotton fabric, genuine leather handle",
@@ -27,7 +35,7 @@ const ProductDetail = () => {
     },
     "gold-kente-bloom": {
       name: "Gold Kente Bloom Fan", 
-      price: "£42",
+      price: 42,
       image: goldFan,
       description: "Gold/green motif, black leather handle",
       materials: "Kente-inspired cotton fabric, genuine leather handle",
@@ -56,6 +64,37 @@ const ProductDetail = () => {
       title: "Added to cart!",
       description: `${product.name} has been added to your cart.`,
     });
+  };
+
+  const handleBuyNow = async () => {
+    if (isProcessingPayment) return;
+    
+    setIsProcessingPayment(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          productId: id,
+          productName: product.name,
+          price: product.price,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment Error",
+        description: "Unable to process payment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   return (
@@ -88,24 +127,37 @@ const ProductDetail = () => {
               </h1>
               <p className="text-xl text-muted-foreground mb-4">{product.description}</p>
               <div className="text-3xl font-display font-bold text-kola">
-                {product.price}
+                £{product.price}
               </div>
             </div>
 
-            {/* Add to Cart */}
+            {/* Buy Now & Add to Cart */}
             <div className="space-y-3">
               <Button 
                 size="lg" 
-                className="w-full bg-kola hover:bg-kola/90"
-                onClick={handleAddToCart}
+                className="w-full"
+                onClick={handleBuyNow}
+                disabled={isProcessingPayment}
               >
-                <ShoppingBag className="h-5 w-5 mr-2" />
-                Add to Cart
+                <CreditCard className="h-5 w-5 mr-2" />
+                {isProcessingPayment ? "Processing..." : `Buy Now - £${product.price}`}
               </Button>
-              <Button variant="outline" size="lg" className="w-full">
-                <Heart className="h-5 w-5 mr-2" />
-                Add to Wishlist
-              </Button>
+              
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline"
+                  size="lg" 
+                  className="flex-1"
+                  onClick={handleAddToCart}
+                >
+                  <ShoppingBag className="h-5 w-5 mr-2" />
+                  Add to Cart
+                </Button>
+                <Button variant="outline" size="lg" className="flex-1">
+                  <Heart className="h-5 w-5 mr-2" />
+                  Wishlist
+                </Button>
+              </div>
             </div>
 
             {/* Product Details */}

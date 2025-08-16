@@ -4,7 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Filter, Grid, List } from "lucide-react";
+import { Filter, Grid, List, CreditCard, Heart } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { createClient } from "@supabase/supabase-js";
 import indigoFan from "@/assets/indigo-sunburst-fan.jpg";
 import goldFan from "@/assets/gold-kente-fan.jpg";
 import coralFan from "@/assets/coral-turquoise-fan.jpg";
@@ -19,12 +21,19 @@ import roseFan from "@/assets/rose-charcoal-fan.jpg";
 const Shop = () => {
   const [viewMode, setViewMode] = useState('grid');
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const [processingPayments, setProcessingPayments] = useState<Set<string>>(new Set());
+  const { toast } = useToast();
+
+  const supabase = createClient(
+    import.meta.env.VITE_SUPABASE_URL!,
+    import.meta.env.VITE_SUPABASE_ANON_KEY!
+  );
 
   const products = [
     {
       id: "indigo-sunburst",
       name: "Indigo Sunburst",
-      price: "£34",
+      price: 34,
       image: indigoFan,
       description: "Geometric ankara patterns with brown leather",
       badge: "Classic",
@@ -34,7 +43,7 @@ const Shop = () => {
     {
       id: "gold-kente-bloom",
       name: "Gold Kente Bloom", 
-      price: "£42",
+      price: 42,
       image: goldFan,
       description: "Luxe gold motifs with black leather handle",
       badge: "Limited",
@@ -44,7 +53,7 @@ const Shop = () => {
     {
       id: "coral-turquoise-wave",
       name: "Coral Turquoise Wave",
-      price: "£38",
+      price: 38,
       image: coralFan,
       description: "Coastal vibes with natural wood handle",
       badge: "New",
@@ -54,7 +63,7 @@ const Shop = () => {
     {
       id: "emerald-geometric",
       name: "Emerald Geometric",
-      price: "£45",
+      price: 45,
       image: emeraldFan,
       description: "Modern lines with bamboo handle",
       badge: "Eco",
@@ -64,7 +73,7 @@ const Shop = () => {
     {
       id: "burgundy-heritage",
       name: "Burgundy Heritage",
-      price: "£48",
+      price: 48,
       image: burgundyFan,
       description: "Traditional motifs with walnut handle",
       badge: "Premium",
@@ -74,7 +83,7 @@ const Shop = () => {
     {
       id: "sunset-navy-bloom",
       name: "Sunset Navy Bloom",
-      price: "£36",
+      price: 36,
       image: sunsetFan,
       description: "Artistic patterns with brass accents",
       badge: "Artist",
@@ -84,7 +93,7 @@ const Shop = () => {
     {
       id: "purple-silver-luxe",
       name: "Purple Silver Luxe",
-      price: "£52",
+      price: 52,
       image: purpleFan,
       description: "Metallic threads with ebony handle",
       badge: "Luxury",
@@ -94,7 +103,7 @@ const Shop = () => {
     {
       id: "sage-minimalist",
       name: "Sage Minimalist",
-      price: "£40",
+      price: 40,
       image: sageFan,
       description: "Clean lines with oak handle",
       badge: "Nordic",
@@ -104,7 +113,7 @@ const Shop = () => {
     {
       id: "electric-eco-burst",
       name: "Electric Eco Burst",
-      price: "£35",
+      price: 35,
       image: electricFan,
       description: "Bold colors with recycled handle",
       badge: "Eco+",
@@ -114,7 +123,7 @@ const Shop = () => {
     {
       id: "rose-charcoal-modern",
       name: "Rose Charcoal Modern",
-      price: "£44",
+      price: 44,
       image: roseFan,
       description: "Abstract design with titanium handle",
       badge: "Future",
@@ -134,6 +143,41 @@ const Shop = () => {
   const filteredProducts = selectedFilter === 'all' 
     ? products 
     : products.filter(p => p.category === selectedFilter);
+
+  const handleQuickBuy = async (product: any) => {
+    if (processingPayments.has(product.id)) return;
+    
+    setProcessingPayments(prev => new Set(prev).add(product.id));
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          productId: product.id,
+          productName: product.name,
+          price: product.price,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment Error",
+        description: "Unable to process payment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setProcessingPayments(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(product.id);
+        return newSet;
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -221,7 +265,7 @@ const Shop = () => {
                     {product.badge}
                   </Badge>
                   <span className="font-display text-xl font-bold text-kola">
-                    {product.price}
+                    £{product.price}
                   </span>
                 </div>
                 
@@ -252,8 +296,23 @@ const Shop = () => {
                   ))}
                 </div>
                 
+                <div className="flex gap-2">
+                  <Button 
+                    className="flex-1"
+                    onClick={() => handleQuickBuy(product)}
+                    disabled={processingPayments.has(product.id)}
+                  >
+                    <CreditCard className="h-4 w-4 mr-1" />
+                    {processingPayments.has(product.id) ? "Processing..." : "Quick Buy"}
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                </div>
+                
                 <Button 
-                  className="w-full bg-gradient-to-r from-kola to-gold hover:from-kola/90 hover:to-gold/90 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+                  variant="outline"
+                  className="w-full"
                   asChild
                 >
                   <Link to={`/product/${product.id}`}>
