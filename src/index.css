@@ -2,39 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Ayo Fans Design System - Nigerian Folding Fans E-commerce
+Celebrating West African craft and women makers
+Colors: kola red, gold, indigo, palm green, chalk, charcoal
 */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Brand Colors - Nigerian Folding Fans */
+    --background: 30 20% 98%; /* chalk #FFF8F0 */
+    --foreground: 210 15% 9%; /* charcoal #161616 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 30 20% 98%;
+    --card-foreground: 210 15% 9%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 30 20% 98%;
+    --popover-foreground: 210 15% 9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Kola Red Primary */
+    --primary: 7 65% 47%; /* kola red #C23A2B */
+    --primary-foreground: 30 20% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Palm Green Secondary */
+    --secondary: 171 64% 28%; /* palm green #1D6F5E */
+    --secondary-foreground: 30 20% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 30 15% 90%;
+    --muted-foreground: 210 10% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Gold Accent */
+    --accent: 49 76% 53%; /* gold #E4B428 */
+    --accent-foreground: 210 15% 9%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Indigo Support */
+    --indigo: 227 42% 29%; /* indigo #2E3A69 */
+    --indigo-foreground: 30 20% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 30 20% 98%;
+
+    --border: 30 10% 85%;
+    --input: 30 10% 85%;
+    --ring: 7 65% 47%;
 
     --radius: 0.5rem;
 
@@ -100,6 +111,91 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  /* Typography */
+  .font-display {
+    font-family: 'Fraunces', serif;
+  }
+  
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Brand Colors */
+  .text-kola {
+    color: hsl(var(--primary));
+  }
+  
+  .text-gold {
+    color: hsl(var(--accent));
+  }
+  
+  .text-indigo {
+    color: hsl(var(--indigo));
+  }
+  
+  .text-palm {
+    color: hsl(var(--secondary));
+  }
+  
+  .bg-kola {
+    background-color: hsl(var(--primary));
+  }
+  
+  .bg-gold {
+    background-color: hsl(var(--accent));
+  }
+  
+  .bg-indigo {
+    background-color: hsl(var(--indigo));
+  }
+  
+  .bg-palm {
+    background-color: hsl(var(--secondary));
+  }
+
+  /* Patterns & Textures */
+  .pattern-subtle {
+    background-image: radial-gradient(circle at 1px 1px, hsl(var(--accent) / 0.1) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }

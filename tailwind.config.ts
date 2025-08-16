@@ -52,6 +52,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				indigo: {
+					DEFAULT: 'hsl(var(--indigo))',
+					foreground: 'hsl(var(--indigo-foreground))'
+				},
+				kola: 'hsl(var(--primary))',
+				gold: 'hsl(var(--accent))',
+				palm: 'hsl(var(--secondary))',
+				chalk: 'hsl(var(--background))',
+				charcoal: 'hsl(var(--foreground))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
