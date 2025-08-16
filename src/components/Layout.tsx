@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingBag, Menu, X } from "lucide-react";
+import CartIcon from "@/components/CartIcon";
 import { useState } from "react";
 
 interface LayoutProps {
@@ -63,10 +64,7 @@ const Layout = ({ children }: LayoutProps) => {
               <Button variant="ghost" size="sm" className="hidden md:flex">
                 <Heart className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm">
-                <ShoppingBag className="h-4 w-4" />
-                <Badge className="ml-1 bg-kola text-primary-foreground">0</Badge>
-              </Button>
+              <CartIcon />
               
               {/* Mobile menu button */}
               <Button

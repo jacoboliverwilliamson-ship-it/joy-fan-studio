@@ -4,9 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Filter, Grid, List, CreditCard, Heart } from "lucide-react";
+import { Filter, Grid, List, CreditCard, Heart, ShoppingBag } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { createClient } from "@supabase/supabase-js";
+import { useCart } from "@/contexts/CartContext";
 import indigoFan from "@/assets/indigo-sunburst-fan.jpg";
 import goldFan from "@/assets/gold-kente-fan.jpg";
 import coralFan from "@/assets/coral-turquoise-fan.jpg";
@@ -23,6 +24,7 @@ const Shop = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [processingPayments, setProcessingPayments] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  const { addItem } = useCart();
 
   const supabase = createClient(
     import.meta.env.VITE_SUPABASE_URL!,
@@ -144,39 +146,18 @@ const Shop = () => {
     ? products 
     : products.filter(p => p.category === selectedFilter);
 
-  const handleQuickBuy = async (product: any) => {
-    if (processingPayments.has(product.id)) return;
+  const handleAddToCart = (product: any) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
     
-    setProcessingPayments(prev => new Set(prev).add(product.id));
-    
-    try {
-      const { data, error } = await supabase.functions.invoke('create-payment', {
-        body: {
-          productId: product.id,
-          productName: product.name,
-          price: product.price,
-        },
-      });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        window.open(data.url, '_blank');
-      }
-    } catch (error) {
-      console.error('Payment error:', error);
-      toast({
-        title: "Payment Error",
-        description: "Unable to process payment. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setProcessingPayments(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(product.id);
-        return newSet;
-      });
-    }
+    toast({
+      title: "Added to cart!",
+      description: `${product.name} has been added to your cart.`,
+    });
   };
 
   return (
@@ -299,11 +280,10 @@ const Shop = () => {
                 <div className="flex gap-2">
                   <Button 
                     className="flex-1"
-                    onClick={() => handleQuickBuy(product)}
-                    disabled={processingPayments.has(product.id)}
+                    onClick={() => handleAddToCart(product)}
                   >
-                    <CreditCard className="h-4 w-4 mr-1" />
-                    {processingPayments.has(product.id) ? "Processing..." : "Quick Buy"}
+                    <ShoppingBag className="h-4 w-4 mr-1" />
+                    Add to Cart
                   </Button>
                   <Button variant="outline" size="sm">
                     <Heart className="h-4 w-4" />

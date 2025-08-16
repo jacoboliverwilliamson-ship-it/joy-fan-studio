@@ -7,12 +7,14 @@ import { Heart, ShoppingBag, Truck, RotateCcw, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { createClient } from "@supabase/supabase-js";
 import { useState } from "react";
+import { useCart } from "@/contexts/CartContext";
 import indigoFan from "@/assets/indigo-sunburst-fan.jpg";
 import goldFan from "@/assets/gold-kente-fan.jpg";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { toast } = useToast();
+  const { addItem } = useCart();
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const supabase = createClient(
@@ -60,6 +62,15 @@ const ProductDetail = () => {
   }
 
   const handleAddToCart = () => {
+    if (!product) return;
+    
+    addItem({
+      id: id!,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+    
     toast({
       title: "Added to cart!",
       description: `${product.name} has been added to your cart.`,
@@ -67,7 +78,7 @@ const ProductDetail = () => {
   };
 
   const handleBuyNow = async () => {
-    if (isProcessingPayment) return;
+    if (isProcessingPayment || !product) return;
     
     setIsProcessingPayment(true);
     
