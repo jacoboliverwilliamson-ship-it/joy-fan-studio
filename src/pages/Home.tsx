@@ -60,8 +60,8 @@ const Home = () => {
             
             <div className="animate-scale-in">
               <img 
-                src={heroImage} 
-                alt="Nigerian folding fan opened in full circle with beautiful indigo and gold West African patterns"
+                src="/lovable-uploads/ceef072c-559d-4631-8a62-f49e0f48133d.png" 
+                alt="Two women holding beautiful Nigerian folding fans with vibrant West African patterns in London"
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
             </div>
