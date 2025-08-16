@@ -60,8 +60,8 @@ const Home = () => {
             
             <div className="animate-scale-in">
               <img 
-                src="/lovable-uploads/ceef072c-559d-4631-8a62-f49e0f48133d.png" 
-                alt="Two women holding beautiful Nigerian folding fans with vibrant West African patterns in London"
+                src="/lovable-uploads/800a663e-2ebc-4a66-8ca3-53d52dd3ad47.png" 
+                alt="Three stylish young women holding vibrant folding fans at golden hour, showcasing diverse community and friendship"
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
             </div>
