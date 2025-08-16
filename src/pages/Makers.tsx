@@ -2,7 +2,8 @@ import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Heart } from "lucide-react";
-import makerImage from "@/assets/maker-adunni.jpg";
+import makerAdunni from "@/assets/maker-adunni.jpg";
+import makerKemi from "@/assets/maker-kemi.jpg";
 
 const Makers = () => {
   const makers = [
@@ -11,7 +12,7 @@ const Makers = () => {
       location: "Lagos, Nigeria",
       craft: "Folding Fan Specialist",
       bio: "With over 15 years of experience, Adunni leads a workshop of 8 women artisans. She specializes in traditional leather working and has perfected the art of creating perfectly balanced folding fans.",
-      image: makerImage,
+      image: makerAdunni,
       region: "Southwest Nigeria"
     },
     {
@@ -19,7 +20,7 @@ const Makers = () => {
       location: "Ibadan, Nigeria",
       craft: "Pattern Designer",
       bio: "Kemi creates custom Ankara patterns that honor traditional motifs while bringing contemporary flair. Her designs tell stories of Nigerian heritage and celebration.",
-      image: makerImage,
+      image: makerKemi,
       region: "Southwest Nigeria"
     }
   ];
