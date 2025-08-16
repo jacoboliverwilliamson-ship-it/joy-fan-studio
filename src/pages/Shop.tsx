@@ -4,9 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Filter, Grid, List, CreditCard, Heart, ShoppingBag } from "lucide-react";
+import { Filter, Grid, List, Heart, ShoppingBag } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { createClient } from "@supabase/supabase-js";
 import { useCart } from "@/contexts/CartContext";
 import indigoFan from "@/assets/indigo-sunburst-fan.jpg";
 import goldFan from "@/assets/gold-kente-fan.jpg";
@@ -26,10 +25,6 @@ const Shop = () => {
   const { toast } = useToast();
   const { addItem } = useCart();
 
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL!,
-    import.meta.env.VITE_SUPABASE_ANON_KEY!
-  );
 
   const products = [
     {

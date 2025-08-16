@@ -6,17 +6,13 @@ import { useCart } from "@/contexts/CartContext";
 import { Minus, Plus, Trash2, ShoppingBag, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabase } from "@/lib/supabaseClient";
 
 const Cart = () => {
   const { state, updateQuantity, removeItem, clearCart } = useCart();
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const { toast } = useToast();
 
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL!,
-    import.meta.env.VITE_SUPABASE_ANON_KEY!
-  );
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity >= 0) {
@@ -37,6 +33,16 @@ const Cart = () => {
         price: item.price,
         quantity: item.quantity,
       }));
+
+      const supabase = getSupabase();
+      if (!supabase) {
+        toast({
+          title: "Checkout not configured",
+          description: "Add Supabase URL and Anon Key to enable payments.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       const { data, error } = await supabase.functions.invoke('create-cart-payment', {
         body: {

@@ -5,11 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useParams } from "react-router-dom";
 import { Heart, ShoppingBag, Truck, RotateCcw, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { createClient } from "@supabase/supabase-js";
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
 import indigoFan from "@/assets/indigo-sunburst-fan.jpg";
 import goldFan from "@/assets/gold-kente-fan.jpg";
+import { getSupabase } from "@/lib/supabaseClient";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,10 +17,6 @@ const ProductDetail = () => {
   const { addItem } = useCart();
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL!,
-    import.meta.env.VITE_SUPABASE_ANON_KEY!
-  );
 
   const products = {
     "indigo-sunburst": {
@@ -83,6 +79,16 @@ const ProductDetail = () => {
     setIsProcessingPayment(true);
     
     try {
+      const supabase = getSupabase();
+      if (!supabase) {
+        toast({
+          title: "Checkout not configured",
+          description: "Add Supabase URL and Anon Key to enable payments.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('create-payment', {
         body: {
           productId: id,
