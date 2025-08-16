@@ -7,62 +7,55 @@ Celebrating West African craft and women makers
 Colors: kola red, gold, indigo, palm green, chalk, charcoal
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700&family=Inter:wght@300;400;500;600;700&display=swap');
+/* Modern hipster-friendly fonts */
 
 @layer base {
   :root {
-    /* Brand Colors - Nigerian Folding Fans */
-    --background: 30 20% 98%; /* chalk #FFF8F0 */
-    --foreground: 210 15% 9%; /* charcoal #161616 */
-
-    --card: 30 20% 98%;
-    --card-foreground: 210 15% 9%;
-
-    --popover: 30 20% 98%;
-    --popover-foreground: 210 15% 9%;
-
-    /* Kola Red Primary */
-    --primary: 7 65% 47%; /* kola red #C23A2B */
-    --primary-foreground: 30 20% 98%;
-
-    /* Palm Green Secondary */
-    --secondary: 171 64% 28%; /* palm green #1D6F5E */
-    --secondary-foreground: 30 20% 98%;
-
-    --muted: 30 15% 90%;
-    --muted-foreground: 210 10% 50%;
-
-    /* Gold Accent */
-    --accent: 49 76% 53%; /* gold #E4B428 */
-    --accent-foreground: 210 15% 9%;
-
-    /* Indigo Support */
-    --indigo: 227 42% 29%; /* indigo #2E3A69 */
-    --indigo-foreground: 30 20% 98%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 30 20% 98%;
-
-    --border: 30 10% 85%;
-    --input: 30 10% 85%;
-    --ring: 7 65% 47%;
-
-    --radius: 0.5rem;
+    /* Modern minimalist color palette */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 15 85% 45%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 15 85% 45%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.75rem;
+    
+    /* Brand colors */
+    --kola: 15 85% 45%;
+    --gold: 50 90% 55%;
+    --palm: 160 50% 35%;
+    --indigo: 220 45% 28%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--kola)), hsl(var(--gold)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--palm)), hsl(var(--indigo)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -122,7 +115,7 @@ Colors: kola red, gold, indigo, palm green, chalk, charcoal
 @layer utilities {
   /* Typography */
   .font-display {
-    font-family: 'Fraunces', serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
   
   .font-body {
